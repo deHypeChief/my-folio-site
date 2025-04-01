@@ -660,6 +660,20 @@ h3 {
         padding: 20px 0;
         margin: 0px 25px 0;
     }
+    .navMenu {
+        width: 100%;
+        top: 80px;
+        left: 0;
+        padding: 10vh 0 0;
+            .navList {
+                margin: 0 30px;
+            }
+            .navbox {
+                padding: 33px 0 30px;
+                margin: 0 30px;
+                border-top: 2px solid #ff1c00;
+            }
+    }
 
     section {
         padding-right: 30px;
@@ -691,12 +705,12 @@ h3 {
         padding: 0 20px;
 
         .heroHeader {
-            padding: 20px 0 80px;
+            padding: 20px 0 40px;
             text-align: center;
         }
 
         .heroImg {
-            height: 60vh;
+            height: 80vh;
             background-size: 250%;
             background-position: 40% 10%;
         }
