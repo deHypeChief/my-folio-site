@@ -11,11 +11,11 @@ export default function Home() {
 
     useEffect(() => {
         document.body.style.overflowY = "hidden";
-
+        
         const preloaderTL = gsap.timeline({
             onStart: () => console.log("Preloader animation started"),
         });
-
+        
         preloaderTL
             .fromTo(".textContent", { opacity: 1, y: -10 }, { delay: 1, opacity: 0, y: -80, duration: 1 })
             .fromTo(".bar", { height: "100%" }, {
@@ -28,7 +28,7 @@ export default function Home() {
                     initScrollAnimations();
                 },
             });
-
+        
         gsap.fromTo(".heroHeader span",
             { opacity: 0, y: -40 },
             {
@@ -38,35 +38,54 @@ export default function Home() {
                     start: "30% 40%",
                     end: "60% 80%",
                     toggleActions: "play none none reverse",
-
                 }
             }
         );
-
-        gsap.to(".heroImg",
-            {
-                height: "50vh",
-                duration: 1,
-                tagger: 0.02,
+        
+        // Create a media match for mobile devices
+        const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
+        
+        // Function to set appropriate zoom-out animation based on screen size
+        const setHeroAnimation = (isMobile) => {
+            // Clear any existing animations first
+            gsap.killTweensOf(".heroImg");
+            
+            // Start with zoomed in state
+            gsap.set(".heroImg", {
+                backgroundSize: isMobile ? "160%" : "80%",
+                backgroundPositionX: isMobile ? "center" : "35%",
+                backgroundPositionY: isMobile ? "center" : "center",
+            });
+            
+            // Animate to zoomed out state
+            gsap.to(".heroImg", {
+                height: isMobile ? "40vh" : "50vh", // Smaller height on mobile
+                duration: 1.2,
                 ease: "power2.out",
-                backgroundSize: "150%",
-                // backgroundPosition: "28% -15%",
-                backgroundPositionX: "35%",
-                backgroundPositionY: "140%",
+                backgroundSize: isMobile ? "170%" : "130%", // Zoom out to smaller size
                 scrollTrigger: {
                     trigger: ".heroWrap",
                     start: "30% 40%",
                     end: "60% 80%",
                     toggleActions: "play none none reverse",
-
                 }
-            }
-        );
-
-
+            });
+        };
+        
+        // Set initial animation based on current screen size
+        setHeroAnimation(mediaQueryMobile.matches);
+        
+        // Add listener for screen size changes
+        const handleMediaChange = (e) => {
+            setHeroAnimation(e.matches);
+        };
+        
+        mediaQueryMobile.addEventListener("change", handleMediaChange);
+        
         return () => {
             document.body.style.overflowY = "scroll";
             ScrollTrigger.clearMatchMedia();
+            mediaQueryMobile.removeEventListener("change", handleMediaChange);
         };
     }, []);
 
