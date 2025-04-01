@@ -8,6 +8,7 @@ import Button from "../components/button";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+
     useEffect(() => {
         document.body.style.overflowY = "hidden";
 
@@ -62,29 +63,98 @@ export default function Home() {
             }
         );
 
-        gsap.to(".wrapProjectBase",
-            {
-                height: "90vh",
-                width: "90vw",
-                borderRadius: "20px",
-                duration: 1,
-                tagger: 0.02,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: ".porjetcs",
-                    start: "30% 40%",
-                    end: "60% 80%",
-                    toggleActions: "play none none reverse",
-
-                }
-            }
-        );
-
 
         return () => {
             document.body.style.overflowY = "scroll";
             ScrollTrigger.clearMatchMedia();
         };
+    }, []);
+
+    useEffect(() => {
+        // Get reference to the testimonial container and navigation buttons
+        const cardsContainer = document.getElementById("testBom");
+        const prevButton = document.querySelector(".navActionTest .actionRound:first-child");
+        const nextButton = document.querySelector(".navActionTest .actionRound:last-child");
+        
+        if (cardsContainer && prevButton && nextButton) {
+            // Get all cards and calculate card width including margin/gap
+            const cards = cardsContainer.querySelectorAll(".testCard");
+            const cardWidth = cards[0].offsetWidth;
+            const containerWidth = cardsContainer.offsetWidth;
+            const visibleCards = Math.floor(containerWidth / cardWidth);
+            const scrollAmount = cardWidth;
+            
+            // Track current index
+            let currentIndex = 0;
+            const maxIndex = cards.length - visibleCards;
+            
+            // Function to scroll to a specific index with snapping
+            const scrollToIndex = (index) => {
+                // Ensure index is within bounds
+                index = Math.max(0, Math.min(index, maxIndex));
+                currentIndex = index;
+                
+                // Calculate exact position to ensure perfect alignment
+                const scrollPos = index * scrollAmount;
+                
+                // Animate scroll with GSAP
+                gsap.to(cardsContainer, {
+                    scrollLeft: scrollPos,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    onComplete: () => {
+                        // Update button states
+                        updateButtonStates();
+                    }
+                });
+            };
+            
+            // Function to scroll left
+            const scrollLeft = () => {
+                scrollToIndex(currentIndex - 1);
+            };
+            
+            // Function to scroll right
+            const scrollRight = () => {
+                scrollToIndex(currentIndex + 1);
+            };
+            
+            // Function to update button states (optional - for disabling at ends)
+            const updateButtonStates = () => {
+                prevButton.classList.toggle("disabled", currentIndex === 0);
+                nextButton.classList.toggle("disabled", currentIndex >= maxIndex);
+            };
+            
+            // Add click event listeners
+            prevButton.addEventListener("click", scrollLeft);
+            nextButton.addEventListener("click", scrollRight);
+            
+            // Optional: Handle manual scrolling with snap effect
+            let scrollTimeout;
+            cardsContainer.addEventListener("scroll", () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // Calculate the closest index based on current scroll position
+                    const scrollPos = cardsContainer.scrollLeft;
+                    const newIndex = Math.round(scrollPos / scrollAmount);
+                    
+                    // Only snap if we're not already animating
+                    if (!gsap.isTweening(cardsContainer)) {
+                        scrollToIndex(newIndex);
+                    }
+                }, 150); // Delay to allow manual scrolling to finish
+            });
+            
+            // Initial button state
+            updateButtonStates();
+            
+            // Cleanup function to remove event listeners
+            return () => {
+                prevButton.removeEventListener("click", scrollLeft);
+                nextButton.removeEventListener("click", scrollRight);
+                cardsContainer.removeEventListener("scroll", () => {});
+            };
+        }
     }, []);
 
     return (
@@ -126,26 +196,10 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="wrk">
-                    <h3>My Clients</h3>
-                    <div className="workedWith">
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                    </div>
-                </section>
 
                 <section className="aboutUs">
                     <div className="aboutWrapT">
-                        <h3>Experienced developer crafting innovative solutions with proven expertise</h3>
+                        <h3>Experienced developer crafting <span className="curs">innovative</span> solutions with proven expertise</h3>
 
                         <div className="aboutText">
                             <p>
@@ -220,6 +274,20 @@ export default function Home() {
                     </div>
                 </section>
 
+                <section className="wrk">
+                    <h3>My Clients</h3>
+                    <div className="workedWith">
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                        <div className="workImages"></div>
+                    </div>
+                </section>
+
                 <section className="aboutUsv">
 
                     <div className="aboutWorkingBox">
@@ -252,17 +320,20 @@ export default function Home() {
                                 <h2>2022 - Present</h2>
                             </div>
                             <div className="expBox">
-                                <h3>Tech Lead</h3>
-                                <h2>2020 - 2022</h2>
+                                <div className="expCo">
+                                    <h3>Senior Developer</h3>
+                                    <h2>@FirstClassPilot</h2>
+                                </div>
+                                <h2>2022 - Present</h2>
                             </div>
                             <div className="expBox">
-                                <h3>Full Stack Developer</h3>
-                                <h2>2019 - 2020</h2>
+                                <div className="expCo">
+                                    <h3>Senior Developer</h3>
+                                    <h2>@FirstClassPilot</h2>
+                                </div>
+                                <h2>2022 - Present</h2>
                             </div>
-                            <div className="expBox">
-                                <h3>Frontend Developer</h3>
-                                <h2>2018 - 2019</h2>
-                            </div>
+                            
                         </div>
                     </div>
                 </section>
@@ -271,7 +342,7 @@ export default function Home() {
                     <div className="testTop">
                         <div className="testTopLeft">
                             <h1>
-                                What my <span>clients</span> say about me
+                                What my <span className="curs">clients</span> say about me
                             </h1>
                             <p>
                                 Attention to detail has earned me positive feedback from clients across various industries.
@@ -294,7 +365,7 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <div className="testcards">
+                    <div className="testcards" id="testBom">
                         {[...Array(5)].map((_, i) => (
                             <div className="testCard" key={i}>
                                 <div className="testCardImg"></div>

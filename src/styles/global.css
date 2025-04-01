@@ -227,6 +227,9 @@ h3 {
 }
 
 .aboutUs {
+    h3 {
+        line-height: 4rem;
+    }
 
     .aboutWrapT {
         display: flex;
@@ -256,12 +259,12 @@ h3 {
 }
 
 .porjetcs {
-    padding: 200px 40px 0;
+    padding: 200px 30px 0;
     /* display: flex; */
     /* align-items: center; */
     /* flex-direction: column; */
     gap: 40px;
-    margin-bottom: -100px;
+    margin-bottom: 60px;
 
     .proTop {
 
@@ -276,7 +279,7 @@ h3 {
 
         .proBox {
             .pimage {
-                height: 450px;
+                height: 380px;
                 width: 100%;
                 background: #ff1c00;
                 border-radius: var(--radius);
@@ -309,7 +312,7 @@ h3 {
                         background: #ff1c00;
                         border-radius: 100px;
                         padding: 5px 20px;
-                        font-size: .9rem;
+                        font-size: .8rem;
                     }
                 }
 
@@ -324,6 +327,8 @@ h3 {
 }
 
 .Exp {
+    padding-top: 40px;
+
     .expContent {
         display: flex;
         gap: 80px;
@@ -380,10 +385,12 @@ h3 {
 
 
 .testmoi {
-    padding-top: 230px;
-    padding-bottom: 50px;
+    padding: 230px 0 50px;
+    padding-right: 30px;
 
     .testTop {
+        padding: 0 30px;
+        padding-right: 0;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
@@ -418,9 +425,15 @@ h3 {
         margin-top: 100px;
         display: flex;
         gap: 40px;
-        overflow-x: hidden;
-        position: relative;
+        overflow-x: scroll;
+        width: 100%;
+        /* position: relative; */
         padding: 20px 0;
+        padding-left: 30px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         .testCard {
             height: fit-content;
@@ -491,6 +504,7 @@ h3 {
             }
 
             &:hover {
+
                 /* animation: none; */
                 .testCardContent {
                     opacity: 1;
@@ -499,9 +513,18 @@ h3 {
                 }
             }
 
-        
+
         }
     }
+}
+
+.curs {
+    background: #ff1c00;
+    padding: 6px 10px;
+    color: black;
+    border-radius: 10px;
+    transform: rotateZ(10deg);
+    /* margin: 5px; */
 }
 
 @keyframes scroll {
@@ -621,15 +644,27 @@ h3 {
         font-size: 1rem;
     }
 
+    h3 {
+        font-size: 1.6rem;
+        line-height: 2rem;
+        /* font-weight: 500; */
+    }
+
     h1 {
         font-size: 2.6rem;
-        line-height: 3rem;
+        line-height: 3.9rem;
         font-weight: 500;
     }
 
     nav {
         padding: 20px 0;
         margin: 0px 25px 0;
+    }
+
+    section {
+        padding-right: 30px;
+        padding: 60px 30px 0;
+        padding-left: 30px;
     }
 
 
@@ -648,13 +683,204 @@ h3 {
         }
     }
 
+    .home {
+        padding: 0;
+    }
+
     .hero {
         padding: 0 20px;
+
+        .heroHeader {
+            padding: 20px 0 80px;
+            text-align: center;
+        }
 
         .heroImg {
             height: 60vh;
             background-size: 250%;
             background-position: 40% 10%;
+        }
+    }
+
+    .porjetcs {
+
+        .prowrap {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .pimage {
+            height: 350px;
+            width: 100%;
+        }
+    }
+
+    .porjetcs {
+        & .prowrap {
+            & .proBox {
+                .pContent {
+                    padding: 40px 2px 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+
+    .aboutUs {
+        h3 {
+            line-height: 2.7rem;
+        }
+        .aboutWrapT {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0px;
+
+            .aboutText {
+                margin-top: 50px;
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
+            }
+        }
+    }
+
+    .workedWith {
+        .workImages {
+            height: 60px;
+            width: 130px;
+        }
+    }
+
+    .Exp {
+        .expContent {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        .expTextGroup {
+            width: initial;
+            gap: 30px;
+        }
+    }
+
+    .testmoi {
+        .testTop {
+            display: flex;
+            flex-direction: column;
+            /* justify-content: space-between; */
+            align-items: flex-start;
+            gap: 30px;
+        }
+    }
+
+    .porjetcs {
+        & .prowrap {
+            & .proBox {
+                & .pContent {
+                    & .con {
+                        .pills {
+                            margin: 10px 0 0;
+                            display: flex;
+                            gap: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .footer {
+        padding: 100px 30px 0;
+
+        .bigIntro {
+            h1 {
+                text-align: center;
+            }
+        }
+
+        & .footerLinks {
+            .links {
+                justify-content: space-between;
+            }
+        }
+
+        .footerLinks {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .socials {
+            align-items: flex-start;
+        }
+
+        .footerBase {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+    .Exp {
+        & .expWrap {
+            & .expBox {
+                & .expCo {
+                    h2 {
+                        font-family: "Montserrat", serif;
+                        padding-top: 6px;
+                        opacity: .6;
+                        font-size: .9rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .Exp {
+        & .expWrap {
+            & .expBox {
+                h2 {
+                    font-weight: 600;
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+    .testmoi {
+        & .testcards {
+            margin-top: 60px;
+            .testCard {
+                height: fit-content;
+                min-width: 100%;
+            }
+        }
+    }
+
+    .testmoi {
+        padding: 100px 0 50px;
+        padding-right: 30px;
+    }
+
+    .porjetcs {
+        & .prowrap {
+            & .proBox {
+                & .pContent {
+                    & .con {
+                        .pillIn {
+                            background: #ff1c00;
+                            border-radius: 100px;
+                            padding: 5px 15px;
+                            font-size: .8rem;
+                        }
+                    }
+                }
+            }
         }
     }
 }
