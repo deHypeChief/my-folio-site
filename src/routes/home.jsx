@@ -52,7 +52,7 @@ export default function Home() {
             
             // Start with zoomed in state
             gsap.set(".heroImg", {
-                backgroundSize: isMobile ? "160%" : "80%",
+                backgroundSize: isMobile ? "200%" : "80%",
                 backgroundPositionX: isMobile ? "center" : "35%",
                 backgroundPositionY: isMobile ? "center" : "center",
             });

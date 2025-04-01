@@ -214,6 +214,7 @@ h3 {
         background: url(../assets/images/cc.png);
         background-size: 120%;
         background-position: 20% 155%;
+        /* background */
     }
 
     .heroHeader {
@@ -667,6 +668,7 @@ h3 {
         padding: 10vh 0 0;
             .navList {
                 margin: 0 30px;
+                gap:40px;
             }
             .navbox {
                 padding: 33px 0 30px;
