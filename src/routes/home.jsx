@@ -297,7 +297,28 @@ export default function Home() {
                     <div className="testcards">
                         {[...Array(5)].map((_, i) => (
                             <div className="testCard" key={i}>
+                                <div className="testCardImg"></div>
+                                <div className="contentrest">
+                                    <div className="tDots">
+                                        <div className="tdotInfo">
+                                            <div className="ddot"></div>
+                                            <p>B and K Stores</p>
+                                        </div>
+                                        <div className="tdotInfo">
+                                            <div className="ddot"></div>
+                                            <p>Delware, USA</p>
+                                        </div>
+                                    </div>
+                                    <h3>Rebeca Jones</h3>
+                                </div>
+                                <div className="testCardContent">
+                                    <p className="testText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus, sit amet ipsum faucibus."</p>
 
+                                    <div className="subTstCont">
+                                        <h3>Client Name</h3>
+                                        <p className="testbTe">Client Position</p>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>

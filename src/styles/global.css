@@ -381,7 +381,7 @@ h3 {
 
 .testmoi {
     padding-top: 230px;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 
     .testTop {
         display: flex;
@@ -423,10 +423,83 @@ h3 {
         padding: 20px 0;
 
         .testCard {
-            height: 400px;
-            min-width: 320px;
-            background: white;
-            animation: scroll 20s linear infinite;
+            height: fit-content;
+            min-width: 350px;
+            /* background: white; */
+            /* animation: scroll 20s linear infinite; */
+            position: relative;
+
+            .testCardImg {
+                height: 300px;
+                width: 100%;
+                border-radius: var(--radius);
+                background: white;
+            }
+
+            .contentrest {
+                h3 {
+                    font-size: 2rem;
+                }
+
+                .tDots {
+                    display: flex;
+                    gap: 20px;
+                    padding: 20px 0 0px;
+
+                    .tdotInfo {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        .ddot {
+                            height: 6px;
+                            width: 6px;
+                            background: #ff1c00;
+                            border-radius: 100px;
+                        }
+
+                        p {
+                            font-size: .9rem
+                        }
+                    }
+                }
+            }
+
+            .testCardContent {
+                opacity: 0;
+                bottom: 0;
+                transform: translateX(0px) rotateZ(0deg);
+                position: absolute;
+                background: #ff1c00;
+                padding: 30px;
+                height: 250px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border-radius: var(--radius);
+                transition: 1s ease;
+
+                h3 {
+                    font-size: 1.2rem;
+                    padding-top: 10px;
+                }
+
+                .testbTe {
+                    font-size: .9rem;
+                    line-height: .9rem;
+                }
+            }
+
+            &:hover {
+                /* animation: none; */
+                .testCardContent {
+                    opacity: 1;
+                    transform: translateX(-10px) rotateZ(2deg);
+                    transition: .5s ease;
+                }
+            }
+
+        
         }
     }
 }
