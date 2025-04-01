@@ -7,7 +7,7 @@ export default function Footer() {
         <section className="footer">
             <div className="bigIntro">
                 <div className="bigEye">
-                    <Eye height={50} raduis={15}/>
+                    <Eye height={50} raduis={15} shadow/>
                 </div>
                 <h1>Bring Your Ideas</h1>
                 <p>My creative solutions have helped clients raise $100+ mln and expand their reach.</p>
