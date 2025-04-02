@@ -24,8 +24,6 @@ export default function Home() {
                 stagger: -0.1,
                 onComplete: () => {
                     document.body.style.overflowY = "scroll";
-                    ScrollTrigger.refresh();
-                    initScrollAnimations();
                 },
             });
 
@@ -42,27 +40,21 @@ export default function Home() {
             }
         );
 
-        // Create a media match for mobile devices
         const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
-
-        // Function to set appropriate zoom-out animation based on screen size
+        
         const setHeroAnimation = (isMobile) => {
-            // Clear any existing animations first
             gsap.killTweensOf(".heroImg");
 
-            // Start with zoomed in state
             gsap.set(".heroImg", {
                 backgroundSize: isMobile ? "200%" : "80%",
-                backgroundPositionX: isMobile ? "center" : "35%",
-                backgroundPositionY: isMobile ? "center" : "center",
+                backgroundPosition: isMobile ? "center" : "35% center",
             });
 
-            // Animate to zoomed out state
             gsap.to(".heroImg", {
-                height: isMobile ? "40vh" : "50vh", // Smaller height on mobile
+                height: isMobile ? "40vh" : "50vh",
                 duration: 1.2,
                 ease: "power2.out",
-                backgroundSize: isMobile ? "170%" : "130%", // Zoom out to smaller size
+                backgroundSize: isMobile ? "170%" : "130%",
                 scrollTrigger: {
                     trigger: ".heroWrap",
                     start: "30% 40%",
@@ -72,142 +64,101 @@ export default function Home() {
             });
         };
 
-        // Set initial animation based on current screen size
         setHeroAnimation(mediaQueryMobile.matches);
-
-        // Add listener for screen size changes
-        const handleMediaChange = (e) => {
-            setHeroAnimation(e.matches);
-        };
-
+        
+        const handleMediaChange = (e) => setHeroAnimation(e.matches);
         mediaQueryMobile.addEventListener("change", handleMediaChange);
 
         return () => {
             document.body.style.overflowY = "scroll";
-            ScrollTrigger.clearMatchMedia();
             mediaQueryMobile.removeEventListener("change", handleMediaChange);
         };
     }, []);
 
     useEffect(() => {
-        // Get reference to the testimonial container and navigation buttons
         const cardsContainer = document.getElementById("testBom");
         const prevButton = document.querySelector(".navActionTest .actionRound:first-child");
         const nextButton = document.querySelector(".navActionTest .actionRound:last-child");
 
-        if (cardsContainer && prevButton && nextButton) {
-            // Get all cards and calculate card width including margin/gap
-            const cards = cardsContainer.querySelectorAll(".testCard");
-            const cardWidth = cards[0].offsetWidth;
-            const containerWidth = cardsContainer.offsetWidth;
-            const visibleCards = Math.floor(containerWidth / cardWidth);
-            const scrollAmount = cardWidth;
+        if (!cardsContainer || !prevButton || !nextButton) return;
 
-            // Track current index
-            let currentIndex = 0;
-            const totalScrollWidth = cardsContainer.scrollWidth - containerWidth;
-            const maxIndex = Math.ceil(totalScrollWidth / scrollAmount);
+        const cards = Array.from(cardsContainer.querySelectorAll(".testCard"));
+        const cardWidth = cards[0]?.offsetWidth || 0;
+        const containerWidth = cardsContainer.offsetWidth;
+        const scrollAmount = cardWidth;
+        let currentIndex = 0;
+        const maxIndex = Math.ceil((cardsContainer.scrollWidth - containerWidth) / scrollAmount);
 
-            // Function to scroll to a specific index
-            const scrollToIndex = (index) => {
-                // Ensure index is within bounds
-                index = Math.max(0, Math.min(index, maxIndex));
-                currentIndex = index;
+        const scrollToIndex = (index) => {
+            currentIndex = Math.max(0, Math.min(index, maxIndex));
+            gsap.to(cardsContainer, {
+                scrollLeft: currentIndex * scrollAmount,
+                duration: 0.5,
+                ease: "power2.out",
+                onComplete: updateButtonStates
+            });
+        };
 
-                // Calculate scroll position
-                const scrollPos = index * scrollAmount;
+        const updateButtonStates = () => {
+            prevButton.classList.toggle("disabled", currentIndex === 0);
+            nextButton.classList.toggle("disabled", currentIndex >= maxIndex);
+        };
 
-                // Animate scroll with GSAP
-                gsap.to(cardsContainer, {
-                    scrollLeft: scrollPos,
-                    duration: 0.5,
-                    ease: "power2.out",
-                    onComplete: () => {
-                        updateButtonStates();
-                    }
-                });
-            };
+        prevButton.addEventListener("click", () => scrollToIndex(currentIndex - 1));
+        nextButton.addEventListener("click", () => scrollToIndex(currentIndex + 1));
+        updateButtonStates();
 
-            // Function to scroll left
-            const scrollLeft = () => {
-                scrollToIndex(currentIndex - 1);
-            };
-
-            // Function to scroll right
-            const scrollRight = () => {
-                scrollToIndex(currentIndex + 1);
-            };
-
-            // Function to update button states
-            const updateButtonStates = () => {
-                prevButton.classList.toggle("disabled", currentIndex === 0);
-                nextButton.classList.toggle("disabled", currentIndex >= maxIndex);
-            };
-
-            // Add click event listeners
-            prevButton.addEventListener("click", scrollLeft);
-            nextButton.addEventListener("click", scrollRight);
-
-            // Initial button state
-            updateButtonStates();
-
-            // Cleanup function
-            return () => {
-                prevButton.removeEventListener("click", scrollLeft);
-                nextButton.removeEventListener("click", scrollRight);
-            };
-        }
+        return () => {
+            prevButton.removeEventListener("click", () => scrollToIndex(currentIndex - 1));
+            nextButton.removeEventListener("click", () => scrollToIndex(currentIndex + 1));
+        };
     }, []);
 
     useEffect(() => {
-        // Create a media match for mobile devices
         const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
-
-        const animateTestCards = (isMobile) => {
-            gsap.from(".testCard", {
-                opacity: 0,
-                y: isMobile ? 30 : 50, // Less movement on mobile
-                duration: isMobile ? 0.6 : 0.8, // Faster animation on mobile
-                stagger: isMobile ? 0.15 : 0.2, // Quicker stagger on mobile
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: ".testcards",
-                    start: isMobile ? "top 90%" : "top 80%", // Start animation sooner on mobile
-                    toggleActions: "play none none reverse"
-                }
-            });
-        };
-
-        const animateSkillBoxes = (isMobile) => {
-            gsap.from(".skillBox", {
-                opacity: 0,
-                y: isMobile ? 30 : 50,
+    
+        const animateElements = (isMobile) => {
+            // Set initial state to avoid snapping
+            gsap.set(".testCard, .skillBox", { opacity: 0, y: isMobile ? 30 : 50 });
+            
+            const settings = {
+                opacity: 1, // Animate TO opacity 1
+                y: 0,
                 duration: isMobile ? 0.6 : 0.8,
                 stagger: isMobile ? 0.15 : 0.2,
                 ease: "power2.out",
-                scrollTrigger: {
-                    trigger: ".skillWrap",
-                    start: isMobile ? "top 90%" : "top 80%",
-                    toggleActions: "play none none reverse"
+            };
+    
+            gsap.to(".testCard", {
+                ...settings,
+                scrollTrigger: { 
+                    trigger: ".testcards", 
+                    start: isMobile ? "top 90%" : "top 80%", 
+                    end: "bottom 20%",
+                    scrub: 1,
+                    // Ensure animation completes
+                    toggleActions: "play none none reset"
+                }
+            });
+    
+            gsap.to(".skillBox", {
+                ...settings,
+                scrollTrigger: { 
+                    trigger: ".skillWrap", 
+                    start: isMobile ? "top 90%" : "top 80%", 
+                    end: "bottom 20%",
+                    scrub: 1,
+                    toggleActions: "play none none reset"
                 }
             });
         };
-
-        // Initial animations based on screen size
-        animateTestCards(mediaQueryMobile.matches);
-        animateSkillBoxes(mediaQueryMobile.matches);
-
-        // Update animations when screen size changes
-        const handleMediaChange = (e) => {
-            animateTestCards(e.matches);
-            animateSkillBoxes(e.matches);
-        };
-
+    
+        animateElements(mediaQueryMobile.matches);
+    
+        const handleMediaChange = (e) => animateElements(e.matches);
         mediaQueryMobile.addEventListener("change", handleMediaChange);
-
-        return () => {
-            mediaQueryMobile.removeEventListener("change", handleMediaChange);
-        };
+    
+        return () => mediaQueryMobile.removeEventListener("change", handleMediaChange);
     }, []);
 
     return (
@@ -497,7 +448,7 @@ export default function Home() {
                         ))}
                     </div>
                     
-                    <div className="info">
+                    <div className="infom">
                         <p>
                         *Tap pic to see comment*
                         </p>
