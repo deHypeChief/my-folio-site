@@ -11,11 +11,11 @@ export default function Home() {
 
     useEffect(() => {
         document.body.style.overflowY = "hidden";
-        
+
         const preloaderTL = gsap.timeline({
             onStart: () => console.log("Preloader animation started"),
         });
-        
+
         preloaderTL
             .fromTo(".textContent", { opacity: 1, y: -10 }, { delay: 1, opacity: 0, y: -80, duration: 1 })
             .fromTo(".bar", { height: "100%" }, {
@@ -28,7 +28,7 @@ export default function Home() {
                     initScrollAnimations();
                 },
             });
-        
+
         gsap.fromTo(".heroHeader span",
             { opacity: 0, y: -40 },
             {
@@ -41,22 +41,22 @@ export default function Home() {
                 }
             }
         );
-        
+
         // Create a media match for mobile devices
         const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
-        
+
         // Function to set appropriate zoom-out animation based on screen size
         const setHeroAnimation = (isMobile) => {
             // Clear any existing animations first
             gsap.killTweensOf(".heroImg");
-            
+
             // Start with zoomed in state
             gsap.set(".heroImg", {
                 backgroundSize: isMobile ? "200%" : "80%",
                 backgroundPositionX: isMobile ? "center" : "35%",
                 backgroundPositionY: isMobile ? "center" : "center",
             });
-            
+
             // Animate to zoomed out state
             gsap.to(".heroImg", {
                 height: isMobile ? "40vh" : "50vh", // Smaller height on mobile
@@ -71,17 +71,17 @@ export default function Home() {
                 }
             });
         };
-        
+
         // Set initial animation based on current screen size
         setHeroAnimation(mediaQueryMobile.matches);
-        
+
         // Add listener for screen size changes
         const handleMediaChange = (e) => {
             setHeroAnimation(e.matches);
         };
-        
+
         mediaQueryMobile.addEventListener("change", handleMediaChange);
-        
+
         return () => {
             document.body.style.overflowY = "scroll";
             ScrollTrigger.clearMatchMedia();
@@ -94,7 +94,7 @@ export default function Home() {
         const cardsContainer = document.getElementById("testBom");
         const prevButton = document.querySelector(".navActionTest .actionRound:first-child");
         const nextButton = document.querySelector(".navActionTest .actionRound:last-child");
-        
+
         if (cardsContainer && prevButton && nextButton) {
             // Get all cards and calculate card width including margin/gap
             const cards = cardsContainer.querySelectorAll(".testCard");
@@ -102,78 +102,112 @@ export default function Home() {
             const containerWidth = cardsContainer.offsetWidth;
             const visibleCards = Math.floor(containerWidth / cardWidth);
             const scrollAmount = cardWidth;
-            
+
             // Track current index
             let currentIndex = 0;
-            const maxIndex = cards.length - visibleCards;
-            
-            // Function to scroll to a specific index with snapping
+            const totalScrollWidth = cardsContainer.scrollWidth - containerWidth;
+            const maxIndex = Math.ceil(totalScrollWidth / scrollAmount);
+
+            // Function to scroll to a specific index
             const scrollToIndex = (index) => {
                 // Ensure index is within bounds
                 index = Math.max(0, Math.min(index, maxIndex));
                 currentIndex = index;
-                
-                // Calculate exact position to ensure perfect alignment
+
+                // Calculate scroll position
                 const scrollPos = index * scrollAmount;
-                
+
                 // Animate scroll with GSAP
                 gsap.to(cardsContainer, {
                     scrollLeft: scrollPos,
                     duration: 0.5,
                     ease: "power2.out",
                     onComplete: () => {
-                        // Update button states
                         updateButtonStates();
                     }
                 });
             };
-            
+
             // Function to scroll left
             const scrollLeft = () => {
                 scrollToIndex(currentIndex - 1);
             };
-            
+
             // Function to scroll right
             const scrollRight = () => {
                 scrollToIndex(currentIndex + 1);
             };
-            
-            // Function to update button states (optional - for disabling at ends)
+
+            // Function to update button states
             const updateButtonStates = () => {
                 prevButton.classList.toggle("disabled", currentIndex === 0);
                 nextButton.classList.toggle("disabled", currentIndex >= maxIndex);
             };
-            
+
             // Add click event listeners
             prevButton.addEventListener("click", scrollLeft);
             nextButton.addEventListener("click", scrollRight);
-            
-            // Optional: Handle manual scrolling with snap effect
-            let scrollTimeout;
-            cardsContainer.addEventListener("scroll", () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    // Calculate the closest index based on current scroll position
-                    const scrollPos = cardsContainer.scrollLeft;
-                    const newIndex = Math.round(scrollPos / scrollAmount);
-                    
-                    // Only snap if we're not already animating
-                    if (!gsap.isTweening(cardsContainer)) {
-                        scrollToIndex(newIndex);
-                    }
-                }, 150); // Delay to allow manual scrolling to finish
-            });
-            
+
             // Initial button state
             updateButtonStates();
-            
-            // Cleanup function to remove event listeners
+
+            // Cleanup function
             return () => {
                 prevButton.removeEventListener("click", scrollLeft);
                 nextButton.removeEventListener("click", scrollRight);
-                cardsContainer.removeEventListener("scroll", () => {});
             };
         }
+    }, []);
+
+    useEffect(() => {
+        // Create a media match for mobile devices
+        const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
+
+        const animateTestCards = (isMobile) => {
+            gsap.from(".testCard", {
+                opacity: 0,
+                y: isMobile ? 30 : 50, // Less movement on mobile
+                duration: isMobile ? 0.6 : 0.8, // Faster animation on mobile
+                stagger: isMobile ? 0.15 : 0.2, // Quicker stagger on mobile
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".testcards",
+                    start: isMobile ? "top 90%" : "top 80%", // Start animation sooner on mobile
+                    toggleActions: "play none none reverse"
+                }
+            });
+        };
+
+        const animateSkillBoxes = (isMobile) => {
+            gsap.from(".skillBox", {
+                opacity: 0,
+                y: isMobile ? 30 : 50,
+                duration: isMobile ? 0.6 : 0.8,
+                stagger: isMobile ? 0.15 : 0.2,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".skillWrap",
+                    start: isMobile ? "top 90%" : "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        };
+
+        // Initial animations based on screen size
+        animateTestCards(mediaQueryMobile.matches);
+        animateSkillBoxes(mediaQueryMobile.matches);
+
+        // Update animations when screen size changes
+        const handleMediaChange = (e) => {
+            animateTestCards(e.matches);
+            animateSkillBoxes(e.matches);
+        };
+
+        mediaQueryMobile.addEventListener("change", handleMediaChange);
+
+        return () => {
+            mediaQueryMobile.removeEventListener("change", handleMediaChange);
+        };
     }, []);
 
     return (
@@ -207,7 +241,7 @@ export default function Home() {
                         <h1 className="heroHeader">
                             {["B", "u", "i", "l", "d", "i", "n", "g", " ",
                                 "w", "i", "t", "h", " ",
-                                "5", "+", " ", "y", "e", "a", "r", "s", " ",
+                                "2", "+", " ", "y", "e", "a", "r", "s", " ",
                                 "e", "x", "p", "e", "r", "i", "e", "n", "c", "e"].map((char, index) => (
                                     <span key={index}>{char}</span>
                                 ))}
@@ -222,7 +256,7 @@ export default function Home() {
 
                         <div className="aboutText">
                             <p>
-                                With over 5 years of experience, I specialize in building robust full-stack applications
+                                With over 2 years of experience, I specialize in building robust full-stack applications
                                 and blockchain solutions. My expertise spans modern web technologies, distributed systems,
                                 and enterprise architectures. I've successfully delivered projects for startups and established companies.
                             </p>
@@ -317,6 +351,49 @@ export default function Home() {
                 </section>
 
 
+                <section className="skillSet">
+                    <div className="skillSetWrap">
+                        <h3>My Tech <span className="curs">Stack</span></h3>
+                        <p>Proficient in a wide range of technologies, including:</p>
+                    </div>
+                    <div className="skillWrap">
+                        <div className="skillBox">
+                            <div className="gravityBox" style={{
+                                background: 'url(https://i.pinimg.com/736x/18/1a/44/181a44121cc6a60166abf0eb98a82ae8.jpg)'
+                            }}>
+                                <img src="https://i.pinimg.com/736x/18/1a/44/181a44121cc6a60166abf0eb98a82ae8.jpg" alt="" />
+                            </div>
+                            <div className="content">
+                                <h3>Devlopment</h3>
+                                <p>Python - Javascript - Node.js - Bun - Typescript - React - MongoDB - Nextjs </p>
+                            </div>
+                        </div>
+
+                        <div className="skillBox">
+                            <div className="gravityBox" style={{
+                                background: 'url()'
+                            }}>
+                                <img src="https://i.pinimg.com/736x/16/e8/dc/16e8dcc18db724e98ccfe665610db60f.jpg" alt="" />
+                            </div>
+                            <div className="content">
+                                <h3>UI/Ux</h3>
+                                <p>Figma - Photoshop - XD</p>
+                            </div>
+                        </div>
+
+                        <div className="skillBox">
+                            <div className="gravityBox" style={{
+                                background: 'url(https://i.pinimg.com/736x/cf/43/3a/cf433a0ec7cedc908fa883c532fee102.jpg)'
+                            }}>
+                                <img src="https://i.pinimg.com/736x/cf/43/3a/cf433a0ec7cedc908fa883c532fee102.jpg" alt="" />
+                            </div>
+                            <div className="content">
+                                <h3>Other</h3>
+                                <p>Team Management -  People Relations</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* Rest of your code remains the same */}
 
@@ -333,26 +410,33 @@ export default function Home() {
                         <div className="expWrap">
                             <div className="expBox">
                                 <div className="expCo">
-                                    <h3>Senior Developer</h3>
+                                    <h3>Mid. Developer</h3>
                                     <h2>@FirstClassPilot</h2>
                                 </div>
                                 <h2>2022 - Present</h2>
                             </div>
                             <div className="expBox">
                                 <div className="expCo">
-                                    <h3>Senior Developer</h3>
+                                    <h3>Contract</h3>
+                                    <h2>@ATP</h2>
+                                </div>
+                                <h2>2022 - Present</h2>
+                            </div>
+                            <div className="expBox">
+                                <div className="expCo">
+                                    <h3>Jn. Developer</h3>
                                     <h2>@FirstClassPilot</h2>
                                 </div>
                                 <h2>2022 - Present</h2>
                             </div>
                             <div className="expBox">
                                 <div className="expCo">
-                                    <h3>Senior Developer</h3>
-                                    <h2>@FirstClassPilot</h2>
+                                    <h3>Tutor</h3>
+                                    <h2></h2>
                                 </div>
                                 <h2>2022 - Present</h2>
                             </div>
-                            
+
                         </div>
                     </div>
                 </section>
@@ -412,7 +496,14 @@ export default function Home() {
                             </div>
                         ))}
                     </div>
+                    
+                    <div className="info">
+                        <p>
+                        *Tap pic to see comment*
+                        </p>
+                    </div>
                 </section>
+                
 
 
                 <Footer />

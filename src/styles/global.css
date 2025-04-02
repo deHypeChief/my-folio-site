@@ -1,4 +1,4 @@
-* {
+    * {
     margin: 0;
     padding: 0;
     font-family: 'Lexend', sans-serif;
@@ -375,6 +375,7 @@ h3 {
     margin-top: 40px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 
     .workImages {
@@ -527,7 +528,54 @@ h3 {
     transform: rotateZ(10deg);
     /* margin: 5px; */
 }
+.skillSet{
+    padding-top: 20px;
+    padding-bottom: 120px;
+}
+.skillSetWrap{
+    h3{
+        line-height: 4rem;
+    }
+}
 
+.skillWrap{
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 2.2fr 1.5fr 1fr;
+    gap: 10px;
+    
+
+    .skillBox{
+        padding: 15px 10px;
+        border-radius: 10px;
+        background-color: #ff1e00;
+        
+        .gravityBox{
+            height: 300px;
+            width: 100%;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            background-position: center;
+            background-size: cover;
+            overflow: hidden;
+
+            img{
+                width: 100%;
+            }
+        }
+        .content{
+            p{
+                /* opacity: .6; */
+                color: #fff;
+            }
+        }
+    }
+}
+
+.wrk{
+    text-align: center;
+    padding-top: 130px;
+}
 @keyframes scroll {
     0% {
         transform: translateX(-5%);
@@ -639,8 +687,38 @@ h3 {
         }
     }
 }
+.info{
+    display:none;
+}
 
 @media screen and (max-width: 600px) {
+    .info{
+        display:flex;
+        margin-right: -30px;
+        margin-top: 40px;
+        justify-content: center;
+        opacity: .8;
+        /* padding-left: 30px; */
+        p{
+            background: #ff1c00;
+            padding: 0px 15px;
+            font-weight: 600;
+            border-radius: 100px;
+            font-size: .6rem;
+        }
+    }
+    .skillWrap{
+        flex-direction: column;
+        padding: 30px 0px;
+        margin-top: 50px;
+    display: flex;
+    gap: 40px;
+    h3{
+        font-size: 2.5rem;
+        padding-bottom: 10px;
+    }
+
+    }
     p {
         font-size: 1rem;
     }
