@@ -14,7 +14,7 @@ export default function Footer() {
     const text = `${greeting} David, I came across your portfolio and I am interested in discussing a potential project with you. Could we schedule a call to talk further?`;
 
     return (
-        <section className="footer">
+        <section className="footer" id="contact">
             <div className="bigIntro">
                 <div className="bigEye">
                     <Eye height={50} raduis={15} shadow />

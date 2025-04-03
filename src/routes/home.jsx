@@ -263,7 +263,7 @@ export default function Home() {
                                         <div className="proBox" key={"pr" + index}>
                                             <div className="pimage" style={{
                                                 background: `url(${urlFor(item.image[randomIndex]).url()})`,
-                                                // backgroundSize: "contain",
+                                                // backgroundSize: "cover",
                                                 backgroundPositionY: "top"
                                             }}>
                                                 {/* <img src={} alt="" /> */}

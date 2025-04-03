@@ -33,11 +33,11 @@ export default function Navbar() {
             {
                 open && <div className="navMenu">
                     <div className="navList">
-                        <h3>Home</h3>
-                        <h3>About</h3>
-                        <h3>Work</h3>
-                        <h3>Projects</h3>
-                        <h3>Contact</h3>
+                        <a href="#home"><h3>Home</h3></a>
+                        <a href="#about"><h3>About</h3></a>
+                        <a href="#jobs"><h3>Experience</h3></a>
+                        <a href="#project"><h3>Projects</h3></a>
+                        <a href="#contact"><h3>Contact</h3></a>
                     </div>
 
                     <div className="navbox">
