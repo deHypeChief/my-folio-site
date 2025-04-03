@@ -289,8 +289,6 @@
                     width: 100%;
                     background: #ff1c00;
                     border-radius: var(--radius);
-                    background-size: cover;
-                    background-position: center;
                     overflow: hidden;
 
                     img {
@@ -537,6 +535,11 @@
                         opacity: 1;
                         transform: translateX(-10px) rotateZ(2deg);
                         transition: .5s ease;
+                        padding: 20px;
+
+                        .testText{
+                            line-height: 1.6rem;
+                        }
                     }
                 }
 
@@ -698,7 +701,7 @@
             width: 0;
         }
 
-        
+
     }
 
     .socials {
@@ -724,8 +727,8 @@
         }
     }
 
-    .navbox{
-        .socials{
+    .navbox {
+        .socials {
             align-items: flex-start;
         }
     }

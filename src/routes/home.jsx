@@ -254,7 +254,7 @@ export default function Home() {
                         <h1>Projects</h1>
                     </div>
 
-                    <div className="prowrap">
+                    <div className="prowrap" key="njskskdjns">
                         {
                             posts.projects?.map((item, index) => {
                                 const randomIndex = Math.floor(Math.random() * item.image.length);
@@ -263,8 +263,8 @@ export default function Home() {
                                         <div className="proBox" key={"pr" + index}>
                                             <div className="pimage" style={{
                                                 background: `url(${urlFor(item.image[randomIndex]).url()})`,
-                                                // backgroundSize: "cover",
-                                                backgroundPositionY: "top"
+                                                backgroundSize: "cover",
+                                                // backgroundPosition: "center"
                                             }}>
                                                 {/* <img src={} alt="" /> */}
                                             </div>
