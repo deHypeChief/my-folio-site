@@ -5,9 +5,37 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Button from "../components/button";
 
+import { client, urlFor } from "../sanity/client"
+import { useState } from "react";
+import { Link } from "react-router";
+
 gsap.registerPlugin(ScrollTrigger);
 
+const PROJECT_QUERY = `*[_type == "project"]`;
+const REVIEWS_QUERY = `*[_type == "review"]`;
+const EXP_QUERY = `*[_type == "experience"]`;
+const COMPANY_QUERY = `*[_type == "company"]`;
+
+
 export default function Home() {
+    const [posts, setPosts] = useState([]);
+    useEffect(() => {
+        async function fetchPosts() {
+            const projects = await client.fetch(PROJECT_QUERY);
+            const reviews = await client.fetch(REVIEWS_QUERY);
+            const exp = await client.fetch(EXP_QUERY);
+            const company = await client.fetch(COMPANY_QUERY);
+            console.log({ projects, reviews, exp, company });
+
+            setPosts({
+                projects,
+                reviews,
+                exp,
+                company
+            });
+        }
+        fetchPosts();
+    }, []);
 
     useEffect(() => {
         document.body.style.overflowY = "hidden";
@@ -41,7 +69,7 @@ export default function Home() {
         );
 
         const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
-        
+
         const setHeroAnimation = (isMobile) => {
             gsap.killTweensOf(".heroImg");
 
@@ -65,7 +93,7 @@ export default function Home() {
         };
 
         setHeroAnimation(mediaQueryMobile.matches);
-        
+
         const handleMediaChange = (e) => setHeroAnimation(e.matches);
         mediaQueryMobile.addEventListener("change", handleMediaChange);
 
@@ -116,11 +144,11 @@ export default function Home() {
 
     useEffect(() => {
         const mediaQueryMobile = window.matchMedia("(max-width: 768px)");
-    
+
         const animateElements = (isMobile) => {
             // Set initial state to avoid snapping
             gsap.set(".testCard, .skillBox", { opacity: 0, y: isMobile ? 30 : 50 });
-            
+
             const settings = {
                 opacity: 1, // Animate TO opacity 1
                 y: 0,
@@ -128,36 +156,36 @@ export default function Home() {
                 stagger: isMobile ? 0.15 : 0.2,
                 ease: "power2.out",
             };
-    
+
             gsap.to(".testCard", {
                 ...settings,
-                scrollTrigger: { 
-                    trigger: ".testcards", 
-                    start: isMobile ? "top 90%" : "top 80%", 
+                scrollTrigger: {
+                    trigger: ".testcards",
+                    start: isMobile ? "top 90%" : "top 80%",
                     end: "bottom 20%",
-                    scrub: 1,
+                    // scrub: 1,
                     // Ensure animation completes
                     toggleActions: "play none none reset"
                 }
             });
-    
+
             gsap.to(".skillBox", {
                 ...settings,
-                scrollTrigger: { 
-                    trigger: ".skillWrap", 
-                    start: isMobile ? "top 90%" : "top 80%", 
+                scrollTrigger: {
+                    trigger: ".skillWrap",
+                    start: isMobile ? "top 90%" : "top 80%",
                     end: "bottom 20%",
                     scrub: 1,
                     toggleActions: "play none none reset"
                 }
             });
         };
-    
+
         animateElements(mediaQueryMobile.matches);
-    
+
         const handleMediaChange = (e) => animateElements(e.matches);
         mediaQueryMobile.addEventListener("change", handleMediaChange);
-    
+
         return () => mediaQueryMobile.removeEventListener("change", handleMediaChange);
     }, []);
 
@@ -186,7 +214,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                <section className="hero">
+                <section className="hero" id="home">
                     <div className="heroWrap">
                         <div className="heroImg"></div>
                         <h1 className="heroHeader">
@@ -201,7 +229,7 @@ export default function Home() {
                 </section>
 
 
-                <section className="aboutUs">
+                <section className="aboutUs" id="about">
                     <div className="aboutWrapT">
                         <h3>Experienced developer crafting <span className="curs">innovative</span> solutions with proven expertise</h3>
 
@@ -211,84 +239,67 @@ export default function Home() {
                                 and blockchain solutions. My expertise spans modern web technologies, distributed systems,
                                 and enterprise architectures. I've successfully delivered projects for startups and established companies.
                             </p>
-                            <Button>View Resume</Button>
+                            <Link to="https://docs.google.com/document/d/1VzOpT-Sg3D0htE_oBN5cShCHrEZLwqvryYQvJHztjGg/edit?usp=sharing">
+                                <Button>View Resume</Button>
+                            </Link>
                         </div>
                     </div>
                 </section>
 
 
 
-                <section className="porjetcs">
+                <section className="porjetcs" id="project">
                     <div className="proTop">
                         <h3>Here are my</h3>
                         <h1>Projects</h1>
                     </div>
 
                     <div className="prowrap">
-                        <div className="proBox">
-                            <div className="pimage">
-
-                            </div>
-                            <div className="pContent">
-                                <div className="con">
-                                    <h3>Project Title</h3>
-                                    <p className="hash">#EduTech</p>
-                                    <div className="pills">
-                                        <div className="pillIn">
-                                            Express
+                        {
+                            posts.projects?.map((item, index) => {
+                                const randomIndex = Math.floor(Math.random() * item.image.length);
+                                return (
+                                    <>
+                                        <div className="proBox" key={"pr" + index}>
+                                            <div className="pimage">
+                                                <img src={`${urlFor(item.image[randomIndex]).url()}`} alt="" />
+                                            </div>
+                                            <div className="pContent">
+                                                <div className="con">
+                                                    <h3>{item.title}</h3>
+                                                    <p className="hash">#EduTech</p>
+                                                    <div className="pills">
+                                                        {
+                                                            item.stack.map((stacks, count) => (
+                                                                <div className="pillIn" key={"st" + count}>
+                                                                    {stacks}
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <Link to={item.projectLink}>
+                                                    <Button>View Project</Button>
+                                                </Link>
+                                            </div>
                                         </div>
-                                        <div className="pillIn">
-                                            Express
-                                        </div>
-                                        <div className="pillIn">
-                                            Express
-                                        </div>
-                                    </div>
-                                </div>
-                                <Button>View Project</Button>
-                            </div>
-                        </div>
-                        <div className="proBox">
-                            <div className="pimage">
-
-                            </div>
-                            <div className="pContent">
-                                <h3>Project Title</h3>
-                                <Button>View Project</Button>
-                            </div>
-                        </div>
-                        <div className="proBox">
-                            <div className="pimage">
-
-                            </div>
-                            <div className="pContent">
-                                <h3>Project Title</h3>
-                                <Button>View Project</Button>
-                            </div>
-                        </div>
-                        <div className="proBox">
-                            <div className="pimage">
-
-                            </div>
-                            <div className="pContent">
-                                <h3>Project Title</h3>
-                                <Button>View Project</Button>
-                            </div>
-                        </div>
+                                    </>
+                                )
+                            })
+                        }
                     </div>
                 </section>
 
                 <section className="wrk">
                     <h3>My Clients</h3>
                     <div className="workedWith">
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
-                        <div className="workImages"></div>
+                        {
+                            posts.company?.map((item, index) => (
+                                <div className="workImages" key={"work" + index}>
+                                    <img src={`${urlFor(item.logo).url()}`} alt={item.name} />
+                                </div>
+                            ))
+                        }
                     </div>
                 </section>
 
@@ -302,7 +313,7 @@ export default function Home() {
                 </section>
 
 
-                <section className="skillSet">
+                <section className="skillSet" id="service">
                     <div className="skillSetWrap">
                         <h3>My Tech <span className="curs">Stack</span></h3>
                         <p>Proficient in a wide range of technologies, including:</p>
@@ -348,7 +359,7 @@ export default function Home() {
 
                 {/* Rest of your code remains the same */}
 
-                <section className="Exp">
+                <section className="Exp" id="jobs">
                     <div className="expContent">
                         <div className="expTextGroup">
                             <p>
@@ -356,38 +367,24 @@ export default function Home() {
                                 and mentored junior developers. My experience includes working with Fortune 500 companies
                                 and contributing to open-source projects.
                             </p>
-                            <Button>Download Resume</Button>
+                            <Link to="https://docs.google.com/document/d/1VzOpT-Sg3D0htE_oBN5cShCHrEZLwqvryYQvJHztjGg/edit?usp=sharing">
+                                <Button>Download Resume</Button>
+                            </Link>
                         </div>
                         <div className="expWrap">
-                            <div className="expBox">
-                                <div className="expCo">
-                                    <h3>Mid. Developer</h3>
-                                    <h2>@FirstClassPilot</h2>
-                                </div>
-                                <h2>2022 - Present</h2>
-                            </div>
-                            <div className="expBox">
-                                <div className="expCo">
-                                    <h3>Contract</h3>
-                                    <h2>@ATP</h2>
-                                </div>
-                                <h2>2022 - Present</h2>
-                            </div>
-                            <div className="expBox">
-                                <div className="expCo">
-                                    <h3>Jn. Developer</h3>
-                                    <h2>@FirstClassPilot</h2>
-                                </div>
-                                <h2>2022 - Present</h2>
-                            </div>
-                            <div className="expBox">
-                                <div className="expCo">
-                                    <h3>Tutor</h3>
-                                    <h2></h2>
-                                </div>
-                                <h2>2022 - Present</h2>
-                            </div>
-
+                            {
+                                posts.exp?.map((item, index) => {
+                                    // console.log(posts.exp)
+                                    return (
+                                        <div className="expBox" key={"exp" + index}>
+                                            <div className="expCo">
+                                                <h3>{item.expType}</h3>
+                                                <h2>{item.companyName && `@${item.companyName}`}</h2>
+                                            </div>
+                                            <h2>{item.duration}</h2>
+                                        </div>
+                                    )
+                                })}
                         </div>
                     </div>
                 </section>
@@ -420,42 +417,45 @@ export default function Home() {
                     </div>
 
                     <div className="testcards" id="testBom">
-                        {[...Array(5)].map((_, i) => (
-                            <div className="testCard" key={i}>
-                                <div className="testCardImg"></div>
-                                <div className="contentrest">
-                                    <div className="tDots">
-                                        <div className="tdotInfo">
-                                            <div className="ddot"></div>
-                                            <p>B and K Stores</p>
-                                        </div>
-                                        <div className="tdotInfo">
-                                            <div className="ddot"></div>
-                                            <p>Delware, USA</p>
-                                        </div>
+                        {posts.reviews?.map((item, i) => (
+                            <>
+                                <div className="testCard" key={i}>
+                                    <div className="testCardImg">
+                                        <img src={`${urlFor(item.clientImage).url()}`} alt="" />
                                     </div>
-                                    <h3>Rebeca Jones</h3>
-                                </div>
-                                <div className="testCardContent">
-                                    <p className="testText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus, sit amet ipsum faucibus."</p>
+                                    <div className="contentrest">
+                                        <div className="tDots">
+                                            <div className="tdotInfo">
+                                                <div className="ddot"></div>
+                                                <p>{item.businessName}</p>
+                                            </div>
+                                            <div className="tdotInfo">
+                                                <div className="ddot"></div>
+                                                <p>{item.location}</p>
+                                            </div>
+                                        </div>
+                                        <h3>{item.clientName}</h3>
+                                    </div>
+                                    <div className="testCardContent">
+                                        <p className="testText">"{item.review}"</p>
 
-                                    <div className="subTstCont">
-                                        <h3>Client Name</h3>
-                                        <p className="testbTe">Client Position</p>
+                                        <div className="subTstCont">
+                                            <h3>{item.clientName}</h3>
+                                            <p className="testbTe">{item.clientPosition}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+
+                            </>
                         ))}
                     </div>
-                    
+
                     <div className="infom">
                         <p>
-                        *Tap pic to see comment*
+                            *Tap pic to see comment*
                         </p>
                     </div>
                 </section>
-                
-
 
                 <Footer />
 

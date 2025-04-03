@@ -7,14 +7,20 @@
     "dev": "vite --port 3001",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sanity": "cd ./folio-cms && sanity dev",
+    "sanity-deploy": "cd ./folio-cms && sanity deploy",
+    "sanity-dev": "concunrently 'bun run dev' 'bun run sanity'"
   },
   "dependencies": {
     "@iconify/react": "^5.2.0",
+    "@sanity/image-url": "^1.1.0",
     "gsap": "^3.12.7",
+    "next-sanity": "^9.9.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router": "^7.1.5"
+    "react-router": "^7.1.5",
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

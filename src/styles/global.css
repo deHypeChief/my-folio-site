@@ -3,11 +3,16 @@
         padding: 0;
         font-family: 'Lexend', sans-serif;
         box-sizing: border-box;
+        text-decoration: none;
 
         --radius: 8px;
         --sapcing-side: 40px;
 
         --color-main: #ff1c00;
+    }
+
+    a {
+        color: initial;
     }
 
 
@@ -286,6 +291,12 @@
                     border-radius: var(--radius);
                     background-size: cover;
                     background-position: center;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        /* object-fit: fill; */
+                    }
                 }
 
                 .pContent {
@@ -381,7 +392,15 @@
         .workImages {
             height: 80px;
             width: 180px;
-            background: #ff1c00;
+            /* background: #ff1c00; */
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                width: 130px;
+            }
         }
     }
 
@@ -439,6 +458,7 @@
 
             .testCard {
                 height: fit-content;
+                width: 350px;
                 min-width: 350px;
                 /* background: white; */
                 /* animation: scroll 20s linear infinite; */
@@ -449,6 +469,11 @@
                     width: 100%;
                     border-radius: var(--radius);
                     background: white;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%
+                    }
                 }
 
                 .contentrest {
@@ -634,6 +659,10 @@
                 flex-direction: column;
                 gap: 10px;
 
+                a {
+                    color: white;
+                }
+
                 .linkHead {
                     font-weight: 600;
                     padding-bottom: 20px;
@@ -687,6 +716,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    color: white;
                 }
             }
         }
@@ -864,6 +894,7 @@
             .workImages {
                 height: 60px;
                 width: 130px;
+
             }
         }
 
