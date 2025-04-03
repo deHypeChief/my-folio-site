@@ -261,13 +261,17 @@ export default function Home() {
                                 return (
                                     <>
                                         <div className="proBox" key={"pr" + index}>
-                                            <div className="pimage">
-                                                <img src={`${urlFor(item.image[randomIndex]).url()}`} alt="" />
+                                            <div className="pimage" style={{
+                                                background: `url(${urlFor(item.image[randomIndex]).url()})`,
+                                                // backgroundSize: "contain",
+                                                backgroundPositionY: "top"
+                                            }}>
+                                                {/* <img src={} alt="" /> */}
                                             </div>
                                             <div className="pContent">
                                                 <div className="con">
                                                     <h3>{item.title}</h3>
-                                                    <p className="hash">#EduTech</p>
+                                                    <p className="hash">#{item.hashtags[0]}</p>
                                                     <div className="pills">
                                                         {
                                                             item.stack.map((stacks, count) => (
