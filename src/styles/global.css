@@ -698,27 +698,35 @@
             width: 0;
         }
 
-        .socials {
+        
+    }
+
+    .socials {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        .socialWrap {
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            gap: 10px;
+            margin-top: 20px;
 
-            .socialWrap {
+            .socialIcon {
+                height: 50px;
+                width: 50px;
+                background: #171717;
+                border-radius: 10px;
                 display: flex;
-                gap: 10px;
-                margin-top: 20px;
-
-                .socialIcon {
-                    height: 50px;
-                    width: 50px;
-                    background: #171717;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                }
+                align-items: center;
+                justify-content: center;
+                color: white;
             }
+        }
+    }
+
+    .navbox{
+        .socials{
+            align-items: flex-start;
         }
     }
 
