@@ -56,7 +56,7 @@ export default function Navbar() {
                     <div className="navbox">
                         <a href={`mailto:davidchinedu.okoye@gmail.com?subject=${encodeURIComponent("Project Inquiry From <Company Name>")}&body=${encodeURIComponent(text)}`}>
 
-                            <h3>david...okoye@gmail.com</h3>
+                            <h3>david...@gmail.com</h3>
                         </a>
                         <div className="socials">
                             <div className="socialWrap">
