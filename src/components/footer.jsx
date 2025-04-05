@@ -29,7 +29,7 @@ export default function Footer() {
                         </Button>
                     </a>
 
-                    <a href={`mailto:dev.hype7@gmail.com?subject=${encodeURIComponent("Project Inquiry From <Company Name>")}&body=${encodeURIComponent(text)}`}>
+                    <a href={`mailto:davidchinedu.okoye@gmail.com?subject=${encodeURIComponent("Project Inquiry From <Company Name>")}&body=${encodeURIComponent(text)}`}>
                         <Button>
                             Hire Me
                         </Button>
@@ -68,8 +68,8 @@ export default function Footer() {
 
                 <div className="socials">
                     <div className="mailAddress">
-                        <a href={`mailto:dev.hype7@gmail.com?subject=${encodeURIComponent("Project Inquiry From <Company Name>")}&body=${encodeURIComponent(text)}`}>
-                            <h3>davidchinedu.okoye@gmail.com</h3>
+                        <a href={`mailto:davidchinedu.okoye@gmail.com?subject=${encodeURIComponent("Project Inquiry From <Company Name>")}&body=${encodeURIComponent(text)}`}>
+                            <h3>david...okoye@gmail.com</h3>
                         </a>
                         <div className="socialLine">
                             {/* <div className="innerLine"></div> */}
